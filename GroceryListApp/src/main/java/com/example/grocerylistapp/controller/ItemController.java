@@ -28,7 +28,17 @@ public class ItemController {
         }
     }
 
-    @GetMapping("/items/{category}")
+   @GetMapping("/items/{id}")
+    public ResponseEntity<Item> getItemById(@PathVariable("id") String id){
+        Optional<Item> item = itemRepository.findById(id);
+        if (item.isPresent()) {
+            return new ResponseEntity<>(item.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/items/category={category}")
     public ResponseEntity<List<Item>> getItemsByCategory(@PathVariable("category") String category){
         try{
             List<Item> items = new ArrayList<Item>(itemRepository.findByCategory(category));
